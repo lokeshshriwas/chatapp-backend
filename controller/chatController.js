@@ -169,6 +169,7 @@ const addToGroup = asyncHandler(async (req, res) => {
     res.json(updateData);
   }
 });
+
 const removeFromGroup = asyncHandler(async (req, res) => {
   const { chatId, userId } = req.body;
 
@@ -182,7 +183,7 @@ const removeFromGroup = asyncHandler(async (req, res) => {
     chatId,
     { $pull: { users: userId } },
     { new: true }
-  ).where({ groupAdmin: { $eq: req.user } });
+  );
 
   if (!userRemovedByAdmin) {
     return res.status(400).send("Only admin can change");
@@ -200,8 +201,6 @@ const removeFromGroup = asyncHandler(async (req, res) => {
     res.json(updateData);
   }
 });
-
-
 
 
 module.exports = {
