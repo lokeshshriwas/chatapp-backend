@@ -6,8 +6,17 @@ const connectDb = require("./config/db.js");
 const userRoute = require("./routes/userRoute.js");
 const chatRoute = require("./routes/chatRoute.js");
 const messsageRoute = require("./routes/messageRoute.js");
-const notificationRoute = require("./routes/notificationRoute.js");
 const { NotFound, ErrorHandler } = require("./middleware/errorMiddleware.js");
+const cors = require("cors");
+
+const corsOptions = {
+  origin: "https://sayheychat.netlify.app",
+  credentials: true,
+  optionSuccessStatus: 200,
+  methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE", "OPTIONS"],
+};
+
+app.use(cors(corsOptions))
 
 connectDb();
 app.use(express.json());
@@ -16,10 +25,11 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api/user", userRoute);
 app.use("/api/chat", chatRoute);
 app.use("/api/message", messsageRoute);
-app.use("/api/notification", notificationRoute);
+
 
 app.use(NotFound);
 app.use(ErrorHandler);
+
 
 const server = app.listen(port, () => {
   console.log(`listing to port ${port}`);
@@ -28,7 +38,7 @@ const server = app.listen(port, () => {
 const io = require("socket.io")(server, {
   pingTimeout: 60000,
   cors: {
-    origin: "http://localhost:5173",
+    origin: "https://sayheychat.netlify.app",
   },
 });
 
